@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>无缝轮播</title>
+	<style>
+		* {
+		    margin:0;
+		    padding:0;
+		}
+		a{
+		    text-decoration: none;
+		}
+		#container {
+		    position: relative;
+		    width: 600px;
+		    height: 400px;
+		    margin:100px auto 0 auto;
+		    box-shadow: 0 0 5px rgb(180, 182, 180);
+		    overflow: hidden;
+		}
+		#container #list {
+		    position: absolute;
+		    width: 4200px;
+		    height: 400px;
+		    z-index: 1;
+		}
+		#container #list img {
+		    float: left;
+		    width: 600px;
+		    height: 400px;
+		}
+		#container #buttons {
+		    position: absolute;
+		    right: 5px;
+		    bottom:30px;
+		    width: 120px;
+		    height: 10px;
+		    z-index: 2;
+		}
+		#container #buttons span {
+		    margin-left: 5px;
+		    display: inline-block;
+		    width: 12px;
+		    height: 12px;
+		    border-radius: 50%;
+		    background-color: rgb(211, 212, 211);
+		    text-align: center;
+		    color:white;
+		    cursor: pointer;
+		}
+		#container #buttons span.on{
+		    background-color: rgb(151, 150, 150);
+		}
+		#container .arrow {
+		    position: absolute;
+		    top: 40%;
+		    color: rgb(179, 182, 179);
+		    padding:0px 15px;
+		    border-radius: 50%;
+		    font-size: 50px;
+		    z-index: 2;
+		    display: none;
+		}
+		#container .arrow_left {
+		    left: 10px;
+		}
+		#container .arrow_right {
+		    right: 10px;
+		}
+		#container:hover .arrow {
+		    display: block;
+		}
+		#container .arrow:hover {
+		    background-color: rgba(0,0,0,0.2);
+		}
+	</style>
+	<script>
+		window.onload = function () {
+
+		    var prev = document.getElementById("prev");
+		    var next = document.getElementById("next");
+		    var list = document.getElementById("list");
+		    var buttons = document.getElementById("buttons").getElementsByTagName("span");
+		    var container = document.getElementById("container");
+		    var index = 1;
+		    var timer;
+		    var animated = false;
+		    function shownButton(){		    
+		        for (var i = 0; i < buttons.length ; i++) {        
+		            if ( buttons[i].className == 'on'){		            
+		                buttons[i].className = '';
+		                /* prev和next每click一次，
+		                        就会清除一次前一个class为on的span元素，
+		                        所以没有必要再去循环下面的span*/
+		                break;
+		            }
+		            //  或者直接遍历清除  buttons[i].className=""；
+		        }
+		        buttons[index - 1].className = "on";
+		    }
+		    function animate(offset){
+		        var time = 300;
+		        var inteval = 10;
+		        var speed = offset / (time / inteval);
+		        animated = true;//更改全局变量，防止跳图
+		        var newLeft = parseInt(list.style.left) + offset;
+		        function go(){		        
+		            if ( (speed > 0 && parseInt(list.style.left) < newLeft) || (speed < 0 && parseInt(list.style.left) > newLeft)) {
+		                list.style.left = parseInt(list.style.left) + speed + 'px';
+		                setTimeout(go, inteval);
+		            }
+		            else {		            
+		                animated = false;//全局变量
+		                 list.style.left=newLeft+"px";
+		                if (newLeft > -600) {
+		                    list.style.left =- 3000 + "px";
+		                };
+		                if (newLeft <- 3000) {
+		                    list.style.left =- 600 + "px";
+		                };
+		            }
+		        }
+		        go();
+		    };
+		    prev.onclick = function (){		    
+		        /*添加一个if判断index为1时，如果继续往前滚的话就让index返回第五个span
+		                但是当快速点击arrow时会出现一种span点亮延迟的情况。可以尝试把判断index是否大于1或小于5的情况放进
+		                判断是否animated的if语句中，先判断能不能点击，再点亮。
+		                */
+		        if (!animated) {
+		            if (index == 1) {
+		                index = 5;
+		            }
+		            else {
+		                index -= 1;
+		            }
+		            shownButton();
+		            animate(600);
+		        }
+		    };
+		    next.onclick = function (){		    
+		        if (!animated) {
+		            if (index == 5) {
+		                index = 1;
+		            }
+		            else {
+		                index += 1;
+		            }
+		            shownButton();
+		            animate(-600);
+		        }
+		    };
+		    for (var i = 0; i < buttons.length; i++) {		    
+		        buttons[i].onclick = function (){		        
+		            //无关紧要
+		            if (this.className == "on") {
+		                return;
+		            }
+		            var myIndex = parseInt(this.getAttribute("index"));
+		            var offset =- 600 * (myIndex - index);
+		            if (!animated) {
+		                animate(offset);
+		            }
+		            index = myIndex;
+		            shownButton();
+		        }
+		    }
+		    function play(){		    
+		        timer = setInterval(function ()
+		        {
+		            next.onclick();
+		        }, 2000);
+		    }
+		    function stop(){		    
+		        clearInterval(timer);
+		    }
+		    play();
+		    container.onmouseover = stop;
+		    container.onmouseout = play;
+		}
+
+	</script>
+</head>
+<body>
+	<div id="container">
+	    <div id="list" style="left: -600px;"><!-- 初始状态是真正的图片1，也就是绝对定位-600px -->
+	        <img src="./images/5.jpg" alt="5">
+		    <img src="./images/1.jpg" alt="1">
+		    <img src="./images/2.jpg" alt="2">
+		    <img src="./images/3.jpg" alt="3">
+		    <img src="./images/4.jpg" alt="4">
+		    <img src="./images/5.jpg" alt="5">
+		    <img src="./images/1.jpg" alt="1">
+	    </div>
+	    <div id="buttons">
+	        <span index="1" class="on"></span><!-- 动画开始时小圆点位于第一个 -->
+	        <span index="2"></span>
+	        <span index="3"></span>
+	        <span index="4"></span>
+	        <span index="5"></span>
+	    </div>
+	    <a id="prev" href="javascript:void (0);" rel="external nofollow" class="arrow arrow_left"><</a><!-- 前一个箭头 -->
+	    <a id="next" href="javascript:void (0);" rel="external nofollow" class="arrow arrow_right">></a><!-- 后一个箭头 -->
+	</div>
+
+</body>
+</html>

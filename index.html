@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		body{
+			margin: 0;
+		}
+		div.form{
+			overflow: hidden;
+			width: 400px;
+			background-color: lightblue;
+			float: left;
+			height: 500px;
+		}
+		div.form table{
+			margin: auto;
+		}
+		div.form table tr td{
+			padding-top: 30px;
+		}
+		div.table{
+			width: 600px;
+			background-color: lightblue;
+			margin-left: 500px;
+			height: 500px;
+			position: relative;
+			border:1px solid #ccc;
+		}
+		div.table div.select{
+			margin: 20px 30%;
+		}
+		div.table table{
+			margin:10px auto;
+			border-collapse: collapse;
+		}
+		div.table table tr td{
+			border:1px solid black;
+			width: 60px;
+			height: 30px;
+			text-align:center;
+		}
+		div.table div.opera{
+			position: absolute;
+			bottom:20px;
+			left:30%;
+		}
+	</style>
+</head>
+<body>
+	<div class="form">
+		<form action="" autocomplete="off">
+			<table>
+				<tr>
+					<td>姓名：</td>
+					<td>
+						<input type="text" name="name" >
+					</td>
+				</tr>
+				<tr>
+					<td>年龄：</td>
+					<td>
+						<input type="number" name="age" >
+					</td>
+				</tr>
+				<tr>
+					<td>性别：</td>
+					<td>
+						<label>
+							<input type="radio" name="sex" checked="" value="男">男
+						</label>
+						<label>
+							<input type="radio" name="sex"  value="女">女
+						</label>
+					</td>
+				</tr>
+				<tr>
+					<td>电话：</td>
+					<td>
+						<input type="tel" name="tel" >
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<button>提交数据</button>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div class="table">
+		<div class="select">
+			<input type="text" placeholder="请输入您要查询的姓名"><button>查询</button>
+		</div>
+		<table>
+			<thead>
+				<tr>
+					<td>序号</td>
+					<td>姓名</td>
+					<td>年龄</td>
+					<td>性别</td>
+					<td>电话</td>
+					<td></td>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<div class="opera">
+			<button>获取信息</button>
+			<button>删除信息</button>
+		</div>
+	</div>
+	<script type="text/javascript" src='index.js'></script>
+</body>
+</html>
